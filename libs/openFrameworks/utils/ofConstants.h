@@ -166,15 +166,18 @@ enum ofTargetPlatform{
         	#include "bcm_host.h"
         #endif
        
-		#include "GLES/gl.h"
-		#include "GLES/glext.h" 
-		#include "GLES2/gl2.h"
-		#include "GLES2/gl2ext.h"
+		//#include "GLES/gl.h"
+		//#include "GLES/glext.h" 
+		//#include "GLES2/gl2.h"
+		//#include "GLES2/gl2ext.h"
 		
-		#define EGL_EGLEXT_PROTOTYPES
-		#include "EGL/egl.h"
-		#include "EGL/eglext.h"
-    #else // normal linux
+		//#define EGL_EGLEXT_PROTOTYPES
+		//#include "EGL/egl.h"
+		//#include "EGL/eglext.h"
+         	#include <GL/glew.h>
+        	#include <GL/gl.h>
+        	#include <GL/glx.h>
+   #else // normal linux
         #include <GL/glew.h>
         #include <GL/gl.h>
         #include <GL/glx.h>
