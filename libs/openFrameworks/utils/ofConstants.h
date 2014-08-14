@@ -72,7 +72,7 @@ enum ofTargetPlatform{
 	#define TARGET_OPENGLES
 #elif defined(__ARMEL__)
 	#define TARGET_LINUX
-	#define TARGET_OPENGLES
+	// #define TARGET_OPENGLES
 	#define TARGET_LINUX_ARM
 #else
 	#define TARGET_LINUX
