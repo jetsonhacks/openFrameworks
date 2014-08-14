@@ -39,13 +39,23 @@ include $(OF_SHARED_MAKEFILES_PATH)/config.linux.common.mk
 ################################################################################
 
 PLATFORM_CFLAGS += -march=armv7
-PLATFORM_CFLAGS += -mtune=cortex-a8 
+PLATFORM_CFLAGS += -mtune=cortex-a15 
 PLATFORM_CFLAGS += -mfpu=neon
 PLATFORM_CFLAGS += -mfloat-abi=hard
 PLATFORM_CFLAGS += -fPIC
 PLATFORM_CFLAGS += -ftree-vectorize
 PLATFORM_CFLAGS += -Wno-psabi
 PLATFORM_CFLAGS += -pipe
+
+PLATFORM_CFLAGS += -I/usr/include/cairo
+PLATFORM_CFLAGS += -I/usr/include/gstreamer-0.10
+PLATFORM_CFLAGS += -I/usr/include/glib-2.0
+PLATFORM_CFLAGS += -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include
+PLATFORM_CFLAGS += -I/usr/include/gtk-3.0
+PLATFORM_CFLAGS += -I/usr/include/pango-1.0
+PLATFORM_CFLAGS += -I/usr/include/gdk-pixbuf-2.0
+PLATFORM_CFLAGS += -I/usr/include/atk-1.0
+PLATFORM_CFLAGS += -I/usr/include/freetype2
 
 ################################################################################
 # PLATFORM LIBRARIES
@@ -66,9 +76,14 @@ PLATFORM_CFLAGS += -pipe
 # Note: Leave a leading space when adding list items with the += operator
 ################################################################################
 
-PLATFORM_PKG_CONFIG_LIBRARIES += glesv1_cm
-PLATFORM_PKG_CONFIG_LIBRARIES += glesv2
-PLATFORM_PKG_CONFIG_LIBRARIES += egl
+#PLATFORM_PKG_CONFIG_LIBRARIES += glesv1_cm
+#PLATFORM_PKG_CONFIG_LIBRARIES += glesv2
+#PLATFORM_PKG_CONFIG_LIBRARIES += egl
+
+# Use OpenGL on Jetson instead of GLES
+PLATFORM_PKG_CONFIG_LIBRARIES += gl
+PLATFORM_PKG_CONFIG_LIBRARIES += glu
+PLATFORM_PKG_CONFIG_LIBRARIES += glew
 
 ifeq ($(CROSS_COMPILING),1)
 	GCC_PREFIX=arm-linux-gnueabihf
