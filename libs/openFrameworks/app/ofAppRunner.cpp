@@ -161,7 +161,9 @@ void ofSetupOpenGL(ofPtr<ofAppBaseWindow> windowPtr, int w, int h, int screenMod
 		#endif
 	}else{
 	    #if defined(TARGET_LINUX_ARM) && !defined(TARGET_RASPBERRY_PI)
-		static_cast<ofAppGLFWWindow*>(window.get())->setOpenGLVersion(1,0);
+		// Changed for Jetson TK1
+		// static_cast<ofAppGLFWWindow*>(window.get())->setOpenGLVersion(1,0);
+		static_cast<ofAppGLFWWindow*>(window.get())->setOpenGLVersion(3,2);
 		#endif
 	}
 
