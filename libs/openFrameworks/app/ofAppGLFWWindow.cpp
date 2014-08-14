@@ -252,7 +252,8 @@ void ofAppGLFWWindow::initializeWindow(){
 	glfwSetWindowSizeCallback(windowP, resize_cb);
 	glfwSetWindowCloseCallback(windowP, exit_cb);
 	glfwSetScrollCallback(windowP, scroll_cb);
-	glfwSetDropCallback(windowP, drop_cb);
+	// Jetson - pass on this for now
+	//glfwSetDropCallback(windowP, drop_cb);
 
 }
 
@@ -930,8 +931,9 @@ void ofAppGLFWWindow::error_cb(int errorCode, const char* errorDescription){
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancode, unsigned int codepoint, int action, int mods) {
+void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancode, int action, int mods) {
 	int key;
+	int codepoint = 0 ;
 	switch (keycode) {
 		case GLFW_KEY_ESCAPE:
 			key = OF_KEY_ESC;
@@ -1039,7 +1041,7 @@ void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancod
 			key = OF_KEY_TAB;
 			break;   
 		default:
-			key = codepoint;
+			key = keycode;
 			break;
 	}
 
