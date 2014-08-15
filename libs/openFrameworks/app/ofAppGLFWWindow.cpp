@@ -261,7 +261,7 @@ void ofAppGLFWWindow::initializeWindow(){
 	glfwSetWindowSizeCallback(windowP, resize_cb);
 	glfwSetWindowCloseCallback(windowP, exit_cb);
 	glfwSetScrollCallback(windowP, scroll_cb);
-	glfwSetDropCallback(windowP, drop_cb);
+	//glfwSetDropCallback(windowP, drop_cb);
 
 }
 
@@ -922,6 +922,23 @@ void ofAppGLFWWindow::scroll_cb(GLFWwindow* windowP_, double x, double y) {
 	//TODO: implement scroll events
 }
 
+#if defined(TARGET_JETSON_TK1) 
+//------------------------------------------------------------
+void ofAppGLFWWindow::drop_cb(GLFWwindow* windowP_, const char* dropString) {
+	string drop = dropString;
+	ofDragInfo drag;
+	drag.position.set(ofGetMouseX()*instance->pixelScreenCoordScale, ofGetMouseY()*instance->pixelScreenCoordScale);
+	drag.files = ofSplitString(drop,"\n",true);
+#ifdef TARGET_LINUX
+	for(int i=0; i<(int)drag.files.size(); i++){
+		drag.files[i] = Poco::URI(drag.files[i]).getPath();
+	}
+#endif
+	ofNotifyDragEvent(drag);
+}
+
+
+#else
 //------------------------------------------------------------
 void ofAppGLFWWindow::drop_cb(GLFWwindow* windowP_, int numFiles, const char** dropString) {
 	ofDragInfo drag;
@@ -933,11 +950,144 @@ void ofAppGLFWWindow::drop_cb(GLFWwindow* windowP_, int numFiles, const char** d
 	ofNotifyDragEvent(drag);
 }
 
+#endif
+
 //------------------------------------------------------------
 void ofAppGLFWWindow::error_cb(int errorCode, const char* errorDescription){
 	ofLogError("ofAppGLFWWindow") << errorCode << ": " << errorDescription;
 }
 
+#if defined(TARGET_JETSON_TK1)
+//------------------------------------------------------------
+void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int key, int scancode, int action, int mods) {
+	int keycode = key ;
+	switch (key) {
+		case GLFW_KEY_ESCAPE:
+			key = OF_KEY_ESC;
+			break;
+		case GLFW_KEY_F1:
+			key = OF_KEY_F1;
+			break;
+		case GLFW_KEY_F2:
+			key = OF_KEY_F2;
+			break;
+		case GLFW_KEY_F3:
+			key = OF_KEY_F3;
+			break;
+		case GLFW_KEY_F4:
+			key = OF_KEY_F4;
+			break;
+		case GLFW_KEY_F5:
+			key = OF_KEY_F5;
+			break;
+		case GLFW_KEY_F6:
+			key = OF_KEY_F6;
+			break;
+		case GLFW_KEY_F7:
+			key = OF_KEY_F7;
+			break;
+		case GLFW_KEY_F8:
+			key = OF_KEY_F8;
+			break;
+		case GLFW_KEY_F9:
+			key = OF_KEY_F9;
+			break;
+		case GLFW_KEY_F10:
+			key = OF_KEY_F10;
+			break;
+		case GLFW_KEY_F11:
+			key = OF_KEY_F11;
+			break;
+		case GLFW_KEY_F12:
+			key = OF_KEY_F12;
+			break;
+		case GLFW_KEY_LEFT:
+			key = OF_KEY_LEFT;
+			break;
+		case GLFW_KEY_RIGHT:
+			key = OF_KEY_RIGHT;
+			break;
+		case GLFW_KEY_UP:
+			key = OF_KEY_UP;
+			break;
+		case GLFW_KEY_DOWN:
+			key = OF_KEY_DOWN;
+			break;
+		case GLFW_KEY_PAGE_UP:
+			key = OF_KEY_PAGE_UP;
+			break;
+		case GLFW_KEY_PAGE_DOWN:
+			key = OF_KEY_PAGE_DOWN;
+			break;
+		case GLFW_KEY_HOME:
+			key = OF_KEY_HOME;
+			break;
+		case GLFW_KEY_END:
+			key = OF_KEY_END;
+			break;
+		case GLFW_KEY_INSERT:
+			key = OF_KEY_INSERT;
+			break;
+		case GLFW_KEY_LEFT_SHIFT:
+			key = OF_KEY_LEFT_SHIFT;
+			break;
+		case GLFW_KEY_LEFT_CONTROL:
+			key = OF_KEY_LEFT_CONTROL;
+			break;
+		case GLFW_KEY_LEFT_ALT:
+			key = OF_KEY_LEFT_ALT;
+			break;
+		case GLFW_KEY_LEFT_SUPER:
+			key = OF_KEY_LEFT_SUPER;
+			break;
+		case GLFW_KEY_RIGHT_SHIFT:
+			key = OF_KEY_RIGHT_SHIFT;
+			break;
+		case GLFW_KEY_RIGHT_CONTROL:
+			key = OF_KEY_RIGHT_CONTROL;
+			break;
+		case GLFW_KEY_RIGHT_ALT:
+			key = OF_KEY_RIGHT_ALT;
+			break;
+		case GLFW_KEY_RIGHT_SUPER:
+			key = OF_KEY_RIGHT_SUPER;
+            break;
+		case GLFW_KEY_BACKSPACE:
+			key = OF_KEY_BACKSPACE;
+			break;
+		case GLFW_KEY_DELETE:
+			key = OF_KEY_DEL;
+			break;
+		case GLFW_KEY_ENTER:
+			key = OF_KEY_RETURN;
+			break;
+		case GLFW_KEY_KP_ENTER:
+			key = OF_KEY_RETURN;
+			break;   
+		case GLFW_KEY_TAB:
+			key = OF_KEY_TAB;
+			break;   
+		default:
+			break;
+	}
+
+	//GLFW defaults to uppercase - OF users are used to lowercase
+    	//we look and see if shift is being held to toggle upper/lowecase 
+	if( key >= 65 && key <= 90 && !ofGetKeyPressed(OF_KEY_SHIFT) ){
+		key += 32;
+	}
+
+	unsigned int codepoint = 0 ; 
+	if(action == GLFW_PRESS || action == GLFW_REPEAT){
+		ofNotifyKeyPressed(key,keycode,scancode,codepoint);
+	}else if (action == GLFW_RELEASE){
+		ofNotifyKeyReleased(key,keycode,scancode,codepoint);
+	}
+}
+
+
+
+#else
 //------------------------------------------------------------
 void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancode, unsigned int codepoint, int action, int mods) {
 	int key;
@@ -1058,6 +1208,8 @@ void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancod
 		ofNotifyKeyReleased(key,keycode,scancode,codepoint);
 	}
 }
+
+#endif
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::resize_cb(GLFWwindow* windowP_,int w, int h) {

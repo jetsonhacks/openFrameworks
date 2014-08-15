@@ -56,6 +56,8 @@
 #include <queue>
 #include <map>
 
+#include <EGL/egl.h>
+
 // TODO: this shold be passed in with the other window settings, like window alpha, etc.
 enum ofAppEGLWindowType {
 	OF_APP_WINDOW_AUTO,

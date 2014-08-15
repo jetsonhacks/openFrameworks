@@ -73,7 +73,9 @@ enum ofTargetPlatform{
 	#define TARGET_OPENGLES
 #elif defined(__ARMEL__)
 	#define TARGET_LINUX
-	#define TARGET_OPENGLES
+	#if !defined(TARGET_JETSON_TK1)  
+		#define TARGET_OPENGLES
+	#endif
 	#define TARGET_LINUX_ARM
 #elif defined(__EMSCRIPTEN__)
 	#define TARGET_EMSCRIPTEN
@@ -169,18 +171,25 @@ enum ofTargetPlatform{
         #include <unistd.h>
 
     #ifdef TARGET_LINUX_ARM
-    	#ifdef TARGET_RASPBERRY_PI
-        	#include "bcm_host.h"
-        #endif
+	#ifdef TARGET_JETSON_TK1
+	   // normal linux
+           #include <GL/glew.h>
+           #include <GL/gl.h>
+           #include <GL/glx.h>
+	#else
+	   #ifdef TARGET_RASPBERRY_PI
+               #include "bcm_host.h"
+           #endif
        
-		#include "GLES/gl.h"
-		#include "GLES/glext.h" 
-		#include "GLES2/gl2.h"
-		#include "GLES2/gl2ext.h"
+	   #include "GLES/gl.h"
+	   #include "GLES/glext.h" 
+	   #include "GLES2/gl2.h"
+	   #include "GLES2/gl2ext.h"
 		
-		#define EGL_EGLEXT_PROTOTYPES
-		#include "EGL/egl.h"
-		#include "EGL/eglext.h"
+	   #define EGL_EGLEXT_PROTOTYPES
+	   #include "EGL/egl.h"
+	   #include "EGL/eglext.h"
+	#endif
     #else // normal linux
         #include <GL/glew.h>
         #include <GL/gl.h>
