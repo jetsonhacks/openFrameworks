@@ -25,6 +25,9 @@ ifndef OF_ROOT
     OF_ROOT=../../..
 endif
 
+# This isn't right, but put it here for now ...
+PLATFORM_VARIANT = jetson
+
 # if the user has not specified a special variant, then use the default variant
 ifndef PLATFORM_VARIANT
     PLATFORM_VARIANT = default
