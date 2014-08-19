@@ -70,7 +70,11 @@ enum TessElementType
 typedef float TESSreal;
 //note this shouldn't be defined(TARGET_OS_IPHONE) as its always defined either 0 or 1
 #if TARGET_OS_IPHONE || ANDROID || __ARMEL__ || __EMSCRIPTEN__
-typedef unsigned short TESSindex;
+	#if TARGET_JETSON_TK1	// Using OpenGL on Jetson; need int, short is for GLES
+		typedef unsigned int TESSindex;
+	#else
+		typedef unsigned short TESSindex;
+	#endif
 #else
 typedef unsigned int TESSindex;
 #endif

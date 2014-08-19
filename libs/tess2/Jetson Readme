@@ -1,0 +1,7 @@
+To run the Jetson under OpenGL, you have to recompile this library with 
+
+PLATFORM_VARIANT = TARGET_JETSON_TK1
+
+This redefines TessIndex to be a full int instead of a short, which is needed in OpenGL.
+
+Short is used for GLES.
