@@ -57,9 +57,9 @@ PLATFORM_DEFINES += TARGET_JETSON_TK1
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
 
-PLATFORM_CFLAGS += -march=armv7
+PLATFORM_CFLAGS += -march=armv7-a
 PLATFORM_CFLAGS += -mtune=cortex-a15
-PLATFORM_CFLAGS += -mfpu=neon
+PLATFORM_CFLAGS += -mfpu=neon-vfpv4
 PLATFORM_CFLAGS += -mfloat-abi=hard
 PLATFORM_CFLAGS += -fPIC
 PLATFORM_CFLAGS += -ftree-vectorize
