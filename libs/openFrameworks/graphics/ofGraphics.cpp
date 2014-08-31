@@ -43,6 +43,7 @@
 	#include <GLUT/glut.h>
 #endif
 #if defined( TARGET_LINUX ) && !defined(TARGET_OPENGLES)
+    #include <GL/glu.h>
 	#include <GL/glut.h>
 #endif
 
@@ -114,16 +115,16 @@ static bool bScreenShotStarted = false;
 //-----------------------------------------------------------------------------------
 void ofBeginSaveScreenAsPDF(string filename, bool bMultipage, bool b3D, ofRectangle viewport){
 	if( bScreenShotStarted )ofEndSaveScreenAsPDF();
-	
+
 	storedRenderer = ofGetCurrentRenderer();
-	
+
 	cairoScreenshot = shared_ptr<ofCairoRenderer>(new ofCairoRenderer);
-	cairoScreenshot->setup(filename, ofCairoRenderer::PDF, bMultipage, b3D, viewport); 		
+	cairoScreenshot->setup(filename, ofCairoRenderer::PDF, bMultipage, b3D, viewport);
 
 	rendererCollection = shared_ptr<ofRendererCollection>(new ofRendererCollection);
 	rendererCollection->renderers.push_back(ofGetGLRenderer());
 	rendererCollection->renderers.push_back(cairoScreenshot);
-	
+
 	ofSetCurrentRenderer(cairoScreenshot, true);
 	bScreenShotStarted = true;
 }
@@ -141,7 +142,7 @@ void ofEndSaveScreenAsPDF(){
 			ofSetCurrentRenderer(storedRenderer,true);
 			storedRenderer.reset();
 		}
-		
+
 		bScreenShotStarted = false;
 	}
 }
@@ -418,7 +419,7 @@ void ofClear(const ofColor & c){
 //----------------------------------------------------------
 void ofClearAlpha(){
 	ofGetCurrentRenderer()->clearAlpha();
-}	
+}
 
 //----------------------------------------------------------
 void ofSetBackgroundAuto(bool bAuto){
@@ -755,7 +756,7 @@ void ofSetStyle(ofStyle style){
 
 	//line width - finally!
 	ofSetLineWidth(style.lineWidth);
-	
+
 	//ofSetDepthTest(style.depthTest); removed since it'll break old projects setting depth test through glEnable
 
 	//rect mode: corner/center
@@ -780,7 +781,7 @@ void ofSetStyle(ofStyle style){
 
 	//blending
 	ofEnableBlendMode(style.blendingMode);
-	
+
 	//bitmap draw mode
 	ofSetDrawBitmapMode(style.drawBitmapMode);
 }
@@ -1123,28 +1124,28 @@ void ofDrawBitmapStringHighlight(string text, int x, int y, const ofColor& backg
 		}
 		maxLineLength = MAX(maxLineLength, currentLineLength);
 	}
-	
+
 	int padding = 4;
 	int fontSize = 8;
 	float leading = 1.7;
 	int height = lines.size() * fontSize * leading - 1;
 	int width = maxLineLength * fontSize;
-	
+
 	ofPushStyle();
 	glDepthMask(false);
 	ofSetColor(background);
 	ofFill();
 	ofPushMatrix();
-	
+
 	if(currentStyle.drawBitmapMode == OF_BITMAPMODE_MODEL) {
 		ofTranslate(x,y,0);
 		ofScale(1,-1,0);
 		ofTranslate(-(padding), + padding - fontSize - 2,0);
 	} else {
 		ofTranslate(x-(padding), y-(padding + fontSize + 2), 0);
-		
+
 	}
-	
+
 	ofRect(0, 0, width + 2 * padding, height + 2 * padding);
 	ofPopMatrix();
 	ofSetColor(foreground);
